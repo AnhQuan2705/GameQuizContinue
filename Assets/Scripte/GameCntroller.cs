@@ -1,0 +1,233 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameCntroller : MonoBehaviour
+{
+    public GameObject carrot, car, grapes, dog, sheep, carrotBlack, carBlack, grapesBlack, dogBlack, sheepBlack, blockPanel;
+
+
+    Vector3 initialCarrotPosition, initialCarPosition, initialGrapesPosition, initialDogPosition, initialSheepPosition;
+
+    bool carrotBool, carBool, grapesBool, dogBool, sheepBool = false;
+
+
+
+
+    public GameObject PausePanel;
+    public static bool gameIsPaused;
+
+    void Start()
+    {
+        initialCarrotPosition = carrot.transform.position;
+       
+
+    }
+
+
+
+
+
+    public void DragCarrot()
+    {
+
+
+        carrot.transform.position = Input.mousePosition;
+
+    }
+
+
+    public void DragCar()
+    {
+
+
+        car.transform.position = Input.mousePosition;
+
+    }
+
+    public void DragGrapes()
+    {
+
+
+        grapes.transform.position = Input.mousePosition;
+
+    }
+
+    public void DragDog()
+    {
+
+
+        dog.transform.position = Input.mousePosition;
+
+    }
+
+    public void DragSheep()
+    {
+
+        sheep.transform.position = Input.mousePosition;
+
+    }
+
+
+
+
+
+
+
+
+    public void DropCarrot()
+    {
+
+        float distance = Vector3.Distance(carrot.transform.position, carrotBlack.transform.position);
+        if (distance < 200)
+        {
+            carrot.transform.position = carrotBlack.transform.position;
+            Score.scoreNumber += 1;
+            carrotBool = true;
+
+
+        }
+        else
+
+        {
+            carrot.transform.position = initialCarrotPosition;
+
+        }
+
+
+
+
+    }
+
+    public void DropCar()
+    {
+
+        float distance = Vector3.Distance(car.transform.position, carBlack.transform.position);
+        if (distance < 50)
+        {
+            car.transform.position = carBlack.transform.position;
+            Score.scoreNumber += 1;
+            carBool = true;
+
+        }
+        else
+        {
+            car.transform.position = initialCarPosition;
+   
+        }
+
+    }
+
+    public void DropGrapes()
+    {
+
+        float distance = Vector3.Distance(grapes.transform.position, grapesBlack.transform.position);
+        if (distance < 50)
+        {
+            grapes.transform.position = grapesBlack.transform.position;
+            Score.scoreNumber += 1;
+            grapesBool = true;
+
+        }
+        else
+        {
+            grapes.transform.position = initialGrapesPosition;
+    
+        }
+
+    }
+
+
+    public void DropDog()
+    {
+
+        float distance = Vector3.Distance(dog.transform.position, dogBlack.transform.position);
+        if (distance < 50)
+        {
+            dog.transform.position = dogBlack.transform.position;
+            dog.transform.localScale = dogBlack.transform.localScale;
+            Score.scoreNumber += 1;
+            dogBool = true;
+
+        }
+        else
+        {
+            dog.transform.position = initialDogPosition;
+ 
+        }
+
+
+
+    }
+    public void DropSheep()
+    {
+
+        float distance = Vector3.Distance(sheep.transform.position, sheepBlack.transform.position);
+        if (distance < 50)
+        {
+            sheep.transform.position = sheepBlack.transform.position;
+            Score.scoreNumber += 1;
+            sheepBool = true;
+
+        }
+        else
+        {
+            sheep.transform.position = initialSheepPosition;
+
+        }
+
+
+
+    }
+
+
+    void Update()
+    {
+        if (carrotBool && carBool && grapesBool && dogBool && sheepBool || Timer.time <= 0)
+        {
+
+            StartCoroutine(LoadNextScene());
+        }
+    }
+
+    IEnumerator LoadNextScene()
+    {
+        blockPanel.SetActive(true);
+        yield return new WaitForSeconds(4f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+
+    public void Setting()
+    {
+        if (gameIsPaused)
+        {
+            Resume();
+        }
+        else
+        {
+            Pause();
+        }
+
+
+    }
+
+    public void Resume()
+    {
+        PausePanel.SetActive(false);
+        Time.timeScale = 1f;
+        gameIsPaused = false;
+    }
+    public void Pause()
+    {
+        PausePanel.SetActive(true);
+        Time.timeScale = 0f;
+        gameIsPaused = true;
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
+}
